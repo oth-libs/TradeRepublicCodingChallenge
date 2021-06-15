@@ -1,15 +1,14 @@
 package io.traderepublic.domain.repository
 
 import io.traderepublic.domain.model.StockModel
-import io.traderepublic.domain.model.StockSubscribeModel
-import io.traderepublic.domain.model.StockUnsubscribeModel
+import io.traderepublic.domain.model.StockPriceModel
 import kotlinx.coroutines.flow.Flow
 
 interface StockRepository {
 
-  fun observeStockUpdates(): Flow<StockModel>
+  fun observeStockUpdates(): Flow<StockPriceModel>
 
-  fun subscribeStock(stockSubscribeModel: StockSubscribeModel)
+  fun subscribeStock(stockModel: StockModel)
 
-  fun unsubscribeStock(stockUnsubscribeModel: StockUnsubscribeModel)
+  fun unsubscribeStock(stockModel: StockModel)
 }

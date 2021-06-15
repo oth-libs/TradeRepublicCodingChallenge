@@ -4,8 +4,8 @@ import android.app.Application
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.viewModelScope
-import io.traderepublic.domain.model.StockSubscribeModel
-import io.traderepublic.domain.model.StockUnsubscribeModel
+import io.traderepublic.domain.model.StockPriceModel
+import io.traderepublic.domain.model.factory.getInitialHardcodedStockPrices
 import io.traderepublic.domain.usecase.ObserveStockUpdatesUseCase
 import io.traderepublic.domain.usecase.SubscribeToStockUseCase
 import io.traderepublic.domain.usecase.UnsubscribeFromStockUseCase
@@ -41,6 +41,8 @@ class HomePageViewModel(
   // |_____/ \__,_|\__\__,_|
   //
   //Font Name: Big
+  private val _stockModelData = mutableListOf<StockPriceModel>().apply { addAll(getInitialHardcodedStockPrices()) }
+  val stockModelData: List<StockPriceModel> = _stockModelData
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -61,7 +63,7 @@ class HomePageViewModel(
 //  }
 
   @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-  fun ooo() {
+  @Suppress("UNUSED") fun observeStockUpdates() {
     viewModelScope.launch {
       observeStockUpdatesUseCase().collect {
         println("stooooooock : $it")
@@ -69,11 +71,11 @@ class HomePageViewModel(
     }
   }
 
-  fun aa() {
-    subscribeToStockUseCase(StockSubscribeModel(""))
+  fun subscribeToStock(stockPriceModel: StockPriceModel) {
+    subscribeToStockUseCase(stockPriceModel.stock)
   }
 
-  fun bb() {
-    unsubscribeFromStockUseCase(StockUnsubscribeModel(""))
+  fun unsubscribeFromStock(stockPriceModel: StockPriceModel) {
+    unsubscribeFromStockUseCase(stockPriceModel.stock)
   }
 }

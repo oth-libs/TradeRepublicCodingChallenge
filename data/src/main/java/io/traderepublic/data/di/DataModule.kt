@@ -1,8 +1,8 @@
 package io.traderepublic.data.di
 
-import io.traderepublic.data.mapper.MapperStockDataToModel
-import io.traderepublic.data.mapper.MapperStockSubscribeModelToData
-import io.traderepublic.data.mapper.MapperStockUnsubscribeModelToData
+import io.traderepublic.data.mapper.MapperStockDataToStockPriceModel
+import io.traderepublic.data.mapper.MapperStockModelToStockSubscribeData
+import io.traderepublic.data.mapper.MapperStockModelToStockUnsubscribeData
 import io.traderepublic.data.repository.StockRepositoryImp
 import io.traderepublic.data.websocket.TRWebSocket
 import io.traderepublic.data.websocket.TRWebSocketImp
@@ -19,17 +19,17 @@ object DataModule {
       single<TRWebSocket> { TRWebSocketImp() }
 
       // mappers
-      single { MapperStockDataToModel() }
-      single { MapperStockSubscribeModelToData() }
-      single { MapperStockUnsubscribeModelToData() }
+      single { MapperStockDataToStockPriceModel() }
+      single { MapperStockModelToStockSubscribeData() }
+      single { MapperStockModelToStockUnsubscribeData() }
 
       // repository
       single<StockRepository> {
         StockRepositoryImp(
           trWebSocket = get(),
-          mapperStockDataToModel = get(),
-          mapperStockSubscribeModelToData = get(),
-          mapperStockUnsubscribeModelToData = get()
+          mapperStockDataToStockPriceModel = get(),
+          mapperStockModelToStockSubscribeData = get(),
+          mapperStockModelToStockUnsubscribeData = get()
         )
       }
     })
