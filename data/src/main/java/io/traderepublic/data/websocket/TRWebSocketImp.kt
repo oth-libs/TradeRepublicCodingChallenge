@@ -1,12 +1,14 @@
 package io.traderepublic.data.websocket
 
-import io.traderepublic.domain.model.StockModel
-import io.traderepublic.domain.model.StockSubscribeModel
-import io.traderepublic.domain.model.StockUnsubscribeModel
+import io.traderepublic.data.model.StockData
+import io.traderepublic.data.model.StockSubscribeData
+import io.traderepublic.data.model.StockUnsubscribeData
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.WebSocket
@@ -19,10 +21,10 @@ internal class TRWebSocketImp : TRWebSocket {
   private val client = OkHttpClient()
   private lateinit var webSocket: WebSocket
 
-  private val stockUpdatesFlow: Flow<StockModel> = callbackFlow {
+  private val stockUpdatesFlow: Flow<StockData> = callbackFlow {
     val webSocketListener = object : WebSocketListener() {
       override fun onMessage(webSocket: WebSocket, text: String) {
-        trySend(StockModel(text, BigDecimal.ONE))
+        trySend(StockData(text, BigDecimal.ONE))
       }
     }
 
@@ -33,13 +35,13 @@ internal class TRWebSocketImp : TRWebSocket {
     awaitClose { webSocket.close(1000, null) }
   }
 
-  override fun observeStockUpdates(): Flow<StockModel> = stockUpdatesFlow
+  override fun observeStockUpdates(): Flow<StockData> = stockUpdatesFlow
 
-  override fun subscribeStock(stockSubscribeModel: StockSubscribeModel) {
-    webSocket.send("""{"subscribe":"US0378331005"}""".trim())//TODO
+  override fun subscribeStock(stockSubscribe: StockSubscribeData) {
+    webSocket.send(Json.encodeToString(stockSubscribe))
   }
 
-  override fun unsubscribeStock(stockUnsubscribeModel: StockUnsubscribeModel) {
-    webSocket.send("""{"unsubscribe":"US0378331005"}""".trim())//TODO
+  override fun unsubscribeStock(stockUnsubscribe: StockUnsubscribeData) {
+    webSocket.send(Json.encodeToString(stockUnsubscribe))
   }
 }
