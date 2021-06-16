@@ -9,6 +9,9 @@ import java.util.Locale
 object Utils {
   private const val CURRENCY_SYMBOL = "€"
 
+  /**
+   * format an amount to 2 fraction digits and appends a currency symbol
+   */
   fun formatAmountWithCurrency(amount: BigDecimal): String {
     val format = NumberFormat.getCurrencyInstance(Locale.getDefault())
     (format as? DecimalFormat)?.apply {

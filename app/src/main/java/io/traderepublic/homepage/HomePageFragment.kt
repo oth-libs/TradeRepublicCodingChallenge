@@ -21,8 +21,10 @@ class HomePageFragment : BaseFragment<FragmentHomepageBinding, HomePageViewModel
   override fun setupBinding() {
     binding.viewModel = viewModel
 
-    binding.rvStockPrices.setup()
-    binding.rvStockPrices.adapter = stockPricesAdapter
+    binding.rvStockPrices.apply {
+      setup()
+      adapter = stockPricesAdapter
+    }
 
     binding.btnSubscribe.setOnClickListener { subscribeToStocks() }
     binding.btnUnsubscribe.setOnClickListener { unsubscribeFromStocks() }
