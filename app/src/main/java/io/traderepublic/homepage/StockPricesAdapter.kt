@@ -1,6 +1,7 @@
 package io.traderepublic.homepage
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.traderepublic.databinding.ItemViewStockPriceBinding
@@ -29,7 +30,8 @@ class StockPricesAdapter(
   inner class ViewHolder(private val binding: ItemViewStockPriceBinding) : RecyclerView.ViewHolder(binding.root) {
     fun bind(stockPriceModel: StockPriceModel) {
       binding.apply {
-        this.stockModel = stockPriceModel
+        stockModel = stockPriceModel
+        subscribeOnClick = View.OnClickListener { subscribeToStock(stockPriceModel) }
         executePendingBindings()
       }
     }

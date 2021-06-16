@@ -33,7 +33,14 @@ class HomePageFragment : BaseFragment<FragmentHomepageBinding, HomePageViewModel
   }
 
   private fun observeViewModelCalls() {
-//    viewModel.pageData.observe(viewLifecycleOwner, ::newPageDataReceived)
+    viewModel.newDataAvailable.observe(viewLifecycleOwner, ::onNewDataAvailable)
+  }
+
+  /**
+   * notify the adapter
+   */
+  private fun onNewDataAvailable(@Suppress("UNUSED_PARAMETER") unit: Unit) {
+    stockPricesAdapter.notifyDataSetChanged()
   }
 
   private fun subscribeToStock(stockPriceModel: StockPriceModel) {
@@ -43,5 +50,4 @@ class HomePageFragment : BaseFragment<FragmentHomepageBinding, HomePageViewModel
   private fun unsubscribeFromStock(stockPriceModel: StockPriceModel) {
     viewModel.unsubscribeFromStock(stockPriceModel)
   }
-
 }

@@ -1,6 +1,5 @@
 package io.traderepublic.data.mapper
 
-import com.doublesymetrymusic.data.mapper.Mapper
 import io.traderepublic.data.model.StockData
 import io.traderepublic.domain.model.StockPriceModel
 import io.traderepublic.domain.model.factory.getHardcodedStocks

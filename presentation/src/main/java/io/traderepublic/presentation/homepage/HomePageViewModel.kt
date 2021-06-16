@@ -2,6 +2,7 @@ package io.traderepublic.presentation.homepage
 
 import android.app.Application
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.viewModelScope
 import io.traderepublic.domain.model.StockPriceModel
@@ -10,6 +11,7 @@ import io.traderepublic.domain.usecase.ObserveStockUpdatesUseCase
 import io.traderepublic.domain.usecase.SubscribeToStockUseCase
 import io.traderepublic.domain.usecase.UnsubscribeFromStockUseCase
 import io.traderepublic.presentation.BaseViewModel
+import io.traderepublic.presentation.livedata.SingleLiveEvent
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -30,6 +32,8 @@ class HomePageViewModel(
   //     \/   |_|\___| \_/\_/   |______|_| \_/ \___|_____/ \__,_|\__\__,_|
   //
   //Font Name: Big
+  private val _newDataAvailable = SingleLiveEvent<Unit>()
+  val newDataAvailable: LiveData<Unit> = _newDataAvailable
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,20 +59,27 @@ class HomePageViewModel(
   //
   //Font Name: Big
   /**
-   * Start app with loading the first page
+   * Start app with observing stock prices
    */
-//  @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-//  private fun loadInitialPage() {
-//    subscribeToStockUseCase(StockSubscribeModel(""))
-//  }
-
   @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
   @Suppress("UNUSED") fun observeStockUpdates() {
     viewModelScope.launch {
-      observeStockUpdatesUseCase().collect {
-        println("stooooooock : $it")
+      observeStockUpdatesUseCase().collect { stockPriceModel ->
+        println("stooooooock : $stockPriceModel")
+
+        _stockModelData.apply {
+          set(indexOfFirst { it.stock == stockPriceModel.stock }, stockPriceModel)
+        }
+
+        _newDataAvailable.value = Unit
       }
     }
+
+    subscribeToHardcodedStocks()
+  }
+
+  private fun subscribeToHardcodedStocks() {
+    _stockModelData.forEach { subscribeToStock(it) }
   }
 
   fun subscribeToStock(stockPriceModel: StockPriceModel) {
@@ -77,5 +88,14 @@ class HomePageViewModel(
 
   fun unsubscribeFromStock(stockPriceModel: StockPriceModel) {
     unsubscribeFromStockUseCase(stockPriceModel.stock)
+  }
+
+  /**
+   * Unsubscribe from all stocks - closing the WebSocket is done automatically when the coroutine scope is stopped using awaitClose in
+   * io.traderepublic.data.websocket.TRWebSocketImp#stockUpdatesFlow#awaitClose
+   */
+  @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+  @Suppress("UNUSED") fun unsubscribeAllStocks() {
+    _stockModelData.forEach { unsubscribeFromStock(it) }
   }
 }

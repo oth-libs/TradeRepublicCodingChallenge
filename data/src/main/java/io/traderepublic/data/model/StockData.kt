@@ -16,10 +16,10 @@ internal data class StockData(
 )
 
 object BigDecimalSerializer : KSerializer<BigDecimal> {
-  override val descriptor = PrimitiveSerialDescriptor("UUID", PrimitiveKind.STRING)
+  override val descriptor = PrimitiveSerialDescriptor("BigDecimal", PrimitiveKind.DOUBLE)
 
   override fun deserialize(decoder: Decoder): BigDecimal {
-    return (decoder.decodeString()).toBigDecimal()
+    return (decoder.decodeDouble()).toBigDecimal()
   }
 
   override fun serialize(encoder: Encoder, value: BigDecimal) {
