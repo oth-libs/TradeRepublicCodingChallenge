@@ -2,6 +2,7 @@ package io.traderepublic.presentation.homepage
 
 import android.app.Application
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.viewModelScope
@@ -62,7 +63,13 @@ class HomePageViewModel(
    * Start app with observing stock prices
    */
   @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-  @Suppress("UNUSED") fun observeStockUpdates() {
+  @Suppress("UNUSED") fun observeStockUpdatesAndSubscribe() {
+    observeStockUpdates()
+
+    subscribeToStocks()
+  }
+
+  fun observeStockUpdates() {
     viewModelScope.launch {
       observeStockUpdatesUseCase().collect { stockPriceModel ->
         _stockModelData.apply {
@@ -72,8 +79,6 @@ class HomePageViewModel(
         _newDataAvailable.value = Unit
       }
     }
-
-    subscribeToStocks()
   }
 
   fun subscribeToStocks() {

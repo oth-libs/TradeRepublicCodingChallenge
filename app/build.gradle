@@ -7,13 +7,13 @@ plugins {
 }
 
 android {
-  compileSdkVersion 30
+  compileSdkVersion compile_sdk_version
   buildToolsVersion "30.0.3"
 
   defaultConfig {
     applicationId "io.traderepublic"
-    minSdkVersion 21
-    targetSdkVersion 30
+    minSdkVersion min_sdk_version
+    targetSdkVersion target_sdk_version
     versionCode 1
     versionName "1.0"
 
@@ -35,13 +35,13 @@ android {
     sourceCompatibility JavaVersion.VERSION_1_8
     targetCompatibility JavaVersion.VERSION_1_8
   }
+
   kotlinOptions {
     jvmTarget = '1.8'
   }
 }
 
 dependencies {
-  
   implementation project(":domain")
   implementation project(":data")
   implementation project(":presentation")
