@@ -15,7 +15,7 @@ internal data class StockData(
   @SerialName("price") @Serializable(with = BigDecimalSerializer::class) val price: BigDecimal
 )
 
-object BigDecimalSerializer : KSerializer<BigDecimal> {
+internal object BigDecimalSerializer : KSerializer<BigDecimal> {
   override val descriptor = PrimitiveSerialDescriptor("BigDecimal", PrimitiveKind.DOUBLE)
 
   override fun deserialize(decoder: Decoder): BigDecimal {
