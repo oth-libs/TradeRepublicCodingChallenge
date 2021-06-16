@@ -8,9 +8,7 @@ import io.traderepublic.databinding.ItemViewStockPriceBinding
 import io.traderepublic.domain.model.StockPriceModel
 
 class StockPricesAdapter(
-  private val data: List<StockPriceModel>,
-  private val subscribeToStock: (StockPriceModel) -> Unit,
-  private val unsubscribeFromStock: (StockPriceModel) -> Unit
+  private val data: List<StockPriceModel>
 ) : RecyclerView.Adapter<StockPricesAdapter.ViewHolder>() {
 
   override fun onCreateViewHolder(parent: ViewGroup, position: Int): ViewHolder {
@@ -31,7 +29,6 @@ class StockPricesAdapter(
     fun bind(stockPriceModel: StockPriceModel) {
       binding.apply {
         stockModel = stockPriceModel
-        subscribeOnClick = View.OnClickListener { subscribeToStock(stockPriceModel) }
         executePendingBindings()
       }
     }

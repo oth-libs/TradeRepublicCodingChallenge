@@ -65,8 +65,6 @@ class HomePageViewModel(
   @Suppress("UNUSED") fun observeStockUpdates() {
     viewModelScope.launch {
       observeStockUpdatesUseCase().collect { stockPriceModel ->
-        println("stooooooock : $stockPriceModel")
-
         _stockModelData.apply {
           set(indexOfFirst { it.stock == stockPriceModel.stock }, stockPriceModel)
         }
@@ -75,27 +73,19 @@ class HomePageViewModel(
       }
     }
 
-    subscribeToHardcodedStocks()
+    subscribeToStocks()
   }
 
-  private fun subscribeToHardcodedStocks() {
-    _stockModelData.forEach { subscribeToStock(it) }
-  }
-
-  fun subscribeToStock(stockPriceModel: StockPriceModel) {
-    subscribeToStockUseCase(stockPriceModel.stock)
-  }
-
-  fun unsubscribeFromStock(stockPriceModel: StockPriceModel) {
-    unsubscribeFromStockUseCase(stockPriceModel.stock)
+  fun subscribeToStocks() {
+    _stockModelData.forEach { subscribeToStockUseCase(it.stock) }
   }
 
   /**
-   * Unsubscribe from all stocks - closing the WebSocket is done automatically when the coroutine scope is stopped using awaitClose in
+   * this method is called on [Lifecycle.Event.ON_STOP] and closing the WebSocket automatically when the coroutine scope is stopped using awaitClose in
    * io.traderepublic.data.websocket.TRWebSocketImp#stockUpdatesFlow#awaitClose
    */
   @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-  @Suppress("UNUSED") fun unsubscribeAllStocks() {
-    _stockModelData.forEach { unsubscribeFromStock(it) }
+  fun unsubscribeFromStocks() {
+    _stockModelData.forEach { unsubscribeFromStockUseCase(it.stock) }
   }
 }

@@ -8,10 +8,6 @@
     <variable
         name="stockModel"
         type="io.traderepublic.domain.model.StockPriceModel" />
-
-    <variable
-        name="subscribeOnClick"
-        type="android.view.View.OnClickListener" />
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,6 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@{stockModel.stock.name}"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="isin" />
@@ -40,14 +37,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="isin" />
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:onClick="@{subscribeOnClick}"
-        android:text="@string/subscribe"
-        app:layout_constraintTop_toBottomOf="@id/tvStockName" />
   </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

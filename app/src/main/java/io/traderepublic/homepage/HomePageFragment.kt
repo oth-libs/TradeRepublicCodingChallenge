@@ -5,7 +5,6 @@ import android.view.View
 import io.traderepublic.BaseFragment
 import io.traderepublic.R
 import io.traderepublic.databinding.FragmentHomepageBinding
-import io.traderepublic.domain.model.StockPriceModel
 import io.traderepublic.extensions.setup
 import io.traderepublic.presentation.homepage.HomePageViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -17,13 +16,16 @@ class HomePageFragment : BaseFragment<FragmentHomepageBinding, HomePageViewModel
   layoutId = R.layout.fragment_homepage,
 ) {
 
-  private val stockPricesAdapter by lazy { StockPricesAdapter(viewModel.stockModelData, ::subscribeToStock, ::unsubscribeFromStock) }
+  private val stockPricesAdapter by lazy { StockPricesAdapter(viewModel.stockModelData) }
 
   override fun setupBinding() {
     binding.viewModel = viewModel
 
     binding.rvStockPrices.setup()
     binding.rvStockPrices.adapter = stockPricesAdapter
+
+    binding.btnSubscribe.setOnClickListener { subscribeToStocks() }
+    binding.btnUnsubscribe.setOnClickListener { unsubscribeFromStocks() }
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,11 +45,11 @@ class HomePageFragment : BaseFragment<FragmentHomepageBinding, HomePageViewModel
     stockPricesAdapter.notifyDataSetChanged()
   }
 
-  private fun subscribeToStock(stockPriceModel: StockPriceModel) {
-    viewModel.subscribeToStock(stockPriceModel)
+  private fun subscribeToStocks() {
+    viewModel.subscribeToStocks()
   }
 
-  private fun unsubscribeFromStock(stockPriceModel: StockPriceModel) {
-    viewModel.unsubscribeFromStock(stockPriceModel)
+  private fun unsubscribeFromStocks() {
+    viewModel.unsubscribeFromStocks()
   }
 }

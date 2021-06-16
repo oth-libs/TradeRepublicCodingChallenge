@@ -19,9 +19,14 @@ android {
   }
 
   buildTypes {
+    debug {
+      buildConfigField "String", "WEB_SOCKET_ADDRESS", '"ws://159.89.15.214:8080/"'
+    }
     release {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+      buildConfigField "String", "WEB_SOCKET_ADDRESS", '"ws://159.89.15.214:8080/"'
     }
   }
   compileOptions {
@@ -47,8 +52,8 @@ dependencies {
   implementation "com.squareup.okhttp3:okhttp:4.9.1"
 
   // kotlinx-serialization
-  implementation"com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0"
-  implementation"org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1"
+  implementation "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0"
+  implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1"
 
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
   implementation 'androidx.core:core-ktx:1.5.0'

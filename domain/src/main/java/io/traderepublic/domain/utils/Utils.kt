@@ -17,8 +17,8 @@ object Utils {
       dfs.currencySymbol = CURRENCY_SYMBOL
       decimalFormatSymbols = dfs
 
-      maximumFractionDigits = if (amount.compareTo(BigDecimal.ZERO) == 0) 0 else 5
-      minimumFractionDigits = if (amount.compareTo(BigDecimal.ZERO) == 0) 0 else 5
+      maximumFractionDigits = if (amount.compareTo(BigDecimal.ZERO) == 0) 0 else 2
+      minimumFractionDigits = if (amount.compareTo(BigDecimal.ZERO) == 0) 0 else 2
     }
 
     return format.format(amount)

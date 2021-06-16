@@ -1,5 +1,6 @@
 package io.traderepublic.data.websocket
 
+import io.traderepublic.data.BuildConfig
 import io.traderepublic.data.model.StockData
 import io.traderepublic.data.model.StockSubscribeData
 import io.traderepublic.data.model.StockUnsubscribeData
@@ -34,7 +35,7 @@ internal class TRWebSocketImp : TRWebSocket {
       }
     }
 
-    val request: Request = Request.Builder().url("ws://159.89.15.214:8080/").build() // todo
+    val request: Request = Request.Builder().url(BuildConfig.WEB_SOCKET_ADDRESS).build()
     webSocket = client.newWebSocket(request, webSocketListener)
 
     awaitClose { webSocket.close(1000, null) }
